@@ -1,14 +1,14 @@
-//import 'dart:html';
+import 'dart:developer';
 
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:news_app/Homepage/General.dart';
 import 'package:news_app/Homepage/Sources.dart';
 import 'package:news_app/Homepage/news_api.dart';
-//import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:news_app/Widget/tabs.dart';
 import 'package:news_app/pages/general.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 
 class Homepage extends StatefulWidget {
   const Homepage({ Key? key }) : super(key: key);
@@ -19,7 +19,6 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   late News no;
-  //late Clone co;
   List<Articles>news=[];
   General gen=General();
   late String y;
@@ -32,17 +31,12 @@ class _HomepageState extends State<Homepage> {
     });
     }
 
-    
-    
-  
-  
   @override
   void initState(){
     super.initState();
     general();
   }
 
-List tabColor=[Colors.white,Colors.white,Colors.white,Colors.white,Colors.white,Colors.white,Colors.white];
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -53,38 +47,31 @@ List tabColor=[Colors.white,Colors.white,Colors.white,Colors.white,Colors.white,
           
           //backgroundColor:
           appBar: AppBar(
-            backgroundColor: Colors.orange[700],
-            //backgroundColor: Colors.tealAccent.shade100,
+            backgroundColor: Colors.orange[600],
             bottom: TabBar(
-              indicatorColor: Colors.amberAccent,
             isScrollable: true,
-           
-              onTap: (index) {
-                      setState(() {
-
-                if(index==0) { tabColor[0] = Colors.black;}
-                if(index==1) {tabColor[1] = Colors.black;}
-                if(index==2) {tabColor[2] = Colors.black;}
-                if(index==3) {tabColor[3] = Colors.black;}
-                if(index==4) {tabColor[4] = Colors.black;}  
-                if(index==5) {tabColor[5] = Colors.black;}  
-                if(index==6) {tabColor[6] = Colors.black;}  
-                                    
-                  });}
-            ,
+            
+             indicator: BoxDecoration(
+               
+               border:Border.all(color: Colors.black,width:2),
+            
+             shape: BoxShape.rectangle,
+             color: Colors.orange[300],
+             borderRadius: BorderRadius.circular(25),
+           ),
+            
               tabs: [
 
-                    Tablls("General",tabColor[0]),
-                    Tablls("Health",tabColor[1]),
-                    Tablls("Sports",tabColor[2]),
-                    Tablls("Entertainment",tabColor[3]),
-                    Tablls("Business",tabColor[4]),
-                    Tablls("Science",tabColor[5]),
-                    Tablls("Technology",tabColor[6]),
+                    Tablls("General"),
+                    Tablls("Health"),
+                    Tablls("Sports"),
+                    Tablls("Entertainment"),
+                    Tablls("Business"),
+                    Tablls("Science"),
+                    Tablls("Technology"),
                     
             ],),
             elevation: 0,
-            //backgroundColor: Colors.white,
             automaticallyImplyLeading: false,
             title:Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -94,31 +81,41 @@ List tabColor=[Colors.white,Colors.white,Colors.white,Colors.white,Colors.white,
                Row(
                  children: [
                    Text("R",
-                   style:GoogleFonts.nothingYouCouldDo(
+                   style:GoogleFonts.courgette(
                      fontSize: 28,
                      fontWeight: FontWeight.w700,
-                     color: Colors.white
+                     color: Colors.red[600],
+                     letterSpacing: 2,
                      ),),
                    Text("ed",
-                   style:GoogleFonts.nothingYouCouldDo(
+                   style:GoogleFonts.courgette(
                      fontSize: 28,
                      fontWeight: FontWeight.w700,
-                     color: Colors.white
+                     color: Colors.red[600],
+                     letterSpacing: 2
                      ),
                    ),
-                   Text(".Birds",
-                   style:GoogleFonts.homemadeApple(
+                   Text("Birds",
+                   style:GoogleFonts.courgette(
                      fontSize: 25,
                      fontWeight: FontWeight.w600,
+                     letterSpacing: 2,
                      color: Colors.white,
                      ),
                    ),
                    
                  ],
                ),
-               //SizedBox(width: 20,),
                IconButton(
-                onPressed: (){},
+                 onPressed:(){ Fluttertoast.showToast(
+                   msg: " Available in next version",
+                   textColor: Colors.white,
+                   toastLength: Toast.LENGTH_SHORT,
+                   gravity: ToastGravity.CENTER,
+                   fontSize: 16,
+                   backgroundColor: Colors.red,
+                   
+                   );},
                icon: Icon(
                  Icons.search,
                  size: 25,
@@ -133,7 +130,7 @@ List tabColor=[Colors.white,Colors.white,Colors.white,Colors.white,Colors.white,
             leading:Builder(builder: (context)=>IconButton(
                  onPressed: (){
                     Scaffold.of(context).openDrawer();
-                   }, icon: CircleAvatar(backgroundImage: AssetImage("asset/images/images.png"),),
+                   }, icon: CircleAvatar(backgroundImage: AssetImage("asset/images/images.png"),radius: 20,),
                    iconSize:25 ,
                    )) ,
             

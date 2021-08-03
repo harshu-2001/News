@@ -3,22 +3,24 @@ import 'package:google_fonts/google_fonts.dart';
 
 class Tablls extends StatefulWidget {
   String s;
-  var col;
-  Tablls(this.s,this.col);
+ 
+  Tablls(this.s);
   @override
-  _TabllsState createState() => _TabllsState(s,col);
+  _TabllsState createState() => _TabllsState(s);
 }
 
 class _TabllsState extends State<Tablls> {
   String s;
-  var col;
-  _TabllsState(this.s,this.col);
+  
+
+  _TabllsState(this.s);
   @override
   Widget build(BuildContext context) {
-    return Tab(child: Text(s,style:GoogleFonts.poppins(
+    return Tab(
+      child: Text(s,style:GoogleFonts.poppins(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: col,
+                    color: Colors.black,
                     
                     ),),); 
   }
