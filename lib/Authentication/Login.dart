@@ -9,7 +9,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  @override
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+ @override
   Widget build(BuildContext context) {
      return Scaffold(
       body: Container(
@@ -58,35 +59,52 @@ class _LoginState extends State<Login> {
                               offset: Offset(0, 10)
                             )]
                           ),
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  border: Border(bottom: BorderSide(color: Colors.grey.shade400))
-                                ),
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                    hintText: "Email or Phone number",
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                    border: InputBorder.none
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    border: Border(bottom: BorderSide(color: Colors.grey.shade400))
+                                  ),
+                                  child: TextFormField(
+                                    validator: (input)
+                                      {
+                                        if(input!.isEmpty){
+                                            return "Enter email";
+                                      }
+                                      },
+                                    decoration: InputDecoration(
+                                      hintText: "Email Address",
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: InputBorder.none
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  border: Border(bottom: BorderSide(color: Colors.grey.shade200))
-                                ),
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                    hintText: "Password",
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                    border: InputBorder.none
+                                Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    border: Border(bottom: BorderSide(color: Colors.grey.shade200))
+                                  ),
+                                  child: TextFormField(
+                                    validator: (input)
+                                      {
+                                        if(input!.length<6){
+                                            return "Wrong Password";
+                                      }
+                                      },
+                                    decoration: InputDecoration(
+                                      hintText: "Password",
+                                      
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: InputBorder.none
+                                    ),
+                                    obscureText: true,
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                         SizedBox(height: 40,),

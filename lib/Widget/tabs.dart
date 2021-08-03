@@ -20,7 +20,7 @@ class _TabllsState extends State<Tablls> {
       child: Text(s,style:GoogleFonts.poppins(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: Colors.black,
+                    color: Colors.white,
                     
                     ),),); 
   }

@@ -51,15 +51,18 @@ class _HomepageState extends State<Homepage> {
             bottom: TabBar(
             isScrollable: true,
             
-             indicator: BoxDecoration(
+          //    indicator: BoxDecoration(
                
-               border:Border.all(color: Colors.black,width:2),
+          //      border:Border.all(color: Colors.black,width:2),
             
-             shape: BoxShape.rectangle,
-             color: Colors.orange[300],
-             borderRadius: BorderRadius.circular(25),
-           ),
-            
+          //    shape: BoxShape.rectangle,
+          //    color: Colors.orange[300],
+          //    borderRadius: BorderRadius.circular(25),
+          //  ),
+            indicatorColor: Colors.black87,
+            automaticIndicatorColorAdjustment: true,
+            indicatorWeight: 2.3,
+            indicatorSize:TabBarIndicatorSize.label ,
               tabs: [
 
                     Tablls("General"),
