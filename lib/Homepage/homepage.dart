@@ -1,6 +1,7 @@
 import 'dart:developer';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:news_app/Homepage/General.dart';
 import 'package:news_app/Homepage/Sources.dart';
 import 'package:news_app/Homepage/news_api.dart';
@@ -18,6 +19,54 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<UserCredential> googleSignIn() async {
+    GoogleSignIn googleSignIn = GoogleSignIn();
+    GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+    if (googleUser != null) {
+      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+      if (googleAuth.idToken != null && googleAuth.accessToken != null) {
+        final AuthCredential credential = GoogleAuthProvider.credential(
+            accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+
+        final UserCredential user =
+            await _auth.signInWithCredential(credential);
+
+        await Navigator.pushReplacementNamed(context, "/");
+
+        return user;
+      } else {
+        throw StateError('Missing Google Auth Token');
+      }
+    } else
+      throw StateError('Sign in Aborted');
+  }
+
+  //final FirebaseAuth _auth = FirebaseAuth.instance;
+  var user;
+  bool isloggedin = false;
+
+  checkAuthentification() async {
+    _auth.authStateChanges().listen((user) {
+      if (user == null) {
+        Navigator.of(context).pushReplacementNamed("Login");
+      }
+    });
+  }
+  getUser() async {
+    User? firebaseUser = _auth.currentUser;
+    await firebaseUser?.reload();
+    firebaseUser = _auth.currentUser;
+
+    if (firebaseUser != null) {
+      setState(() {
+        this.user = firebaseUser!;
+        this.isloggedin = true;
+      });
+    }
+  }
   late News no;
   List<Articles>news=[];
   General gen=General();
@@ -30,18 +79,24 @@ class _HomepageState extends State<Homepage> {
     
     });
     }
+    signOut() async {
+    _auth.signOut();
+
+    // final googleSignIn = GoogleSignIn();
+    // await googleSignIn.signOut();
+  }
 
   @override
   void initState(){
     super.initState();
-    general();
+    this.checkAuthentification();
+    this.getUser();
+    this.general();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: DefaultTabController(
+    return DefaultTabController(
         length: 7,
         child: Scaffold(
           
@@ -50,15 +105,6 @@ class _HomepageState extends State<Homepage> {
             backgroundColor: Colors.orange[600],
             bottom: TabBar(
             isScrollable: true,
-            
-          //    indicator: BoxDecoration(
-               
-          //      border:Border.all(color: Colors.black,width:2),
-            
-          //    shape: BoxShape.rectangle,
-          //    color: Colors.orange[300],
-          //    borderRadius: BorderRadius.circular(25),
-          //  ),
             indicatorColor: Colors.black87,
             automaticIndicatorColorAdjustment: true,
             indicatorWeight: 2.3,
@@ -142,11 +188,28 @@ class _HomepageState extends State<Homepage> {
           drawer: Drawer(
             elevation: 0,
             child: ListView(children: [
-              DrawerHeader(child: Text("data")),
+              DrawerHeader(child: Text("${user.displayName}")),
+              
+              TextButton(onPressed: signOut, child: Text("Sign out")),
             ],),
           ),
 
-          body: TabBarView(
+          body: !isloggedin
+            ? 
+            Container(
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      child: CircularProgressIndicator(),
+                      height: 100.0,
+                      width: 100.0,
+                      ),
+                  ],
+                ),
+              ),
+            ):TabBarView(
                     children:<Widget>[ 
 
             Control(),
@@ -160,7 +223,7 @@ class _HomepageState extends State<Homepage> {
             ]
           ),
         ),
-      ),
+      
     );
   }
 }

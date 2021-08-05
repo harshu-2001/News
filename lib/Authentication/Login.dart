@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:news_app/Authentication/signup.dart';
 
 
 class Login extends StatefulWidget {
@@ -9,7 +12,64 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  late String _email, _password;
+
+  checkAuthentification() async {
+    _auth.authStateChanges().listen((user) {
+      if (user != null) {
+        print(user);
+
+        Navigator.pushReplacementNamed(context, "/");
+      }
+    });
+  }
+  @override
+  void initState() {
+    super.initState();
+    this.checkAuthentification();
+  }
+
+  login() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState?.save();
+
+      try {
+        await _auth.signInWithEmailAndPassword(
+            email: _email, password: _password);
+      } catch (e) {
+        showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('ERROR'),
+            content: Text(e.toString()),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'))
+            ],
+          );
+        });
+        print(e);
+      }
+    }
+    else{
+      print("hello");
+    }
+  }
+
+  navigateToSignUp() async {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Signup()));
+  }
+  navigatortostart()async{
+    Navigator.pushReplacementNamed(context, "/");
+  }
+
  @override
   Widget build(BuildContext context) {
      return Scaffold(
@@ -18,21 +78,60 @@ class _LoginState extends State<Login> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
-            colors: <Color>[Colors.orange.shade900,Colors.orange.shade600, Colors.orange.shade100],
+            colors: <Color>[Colors.orange.shade800,Colors.orange.shade600, Colors.orange.shade100],
           )
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            SizedBox(height: 80,),
+            SizedBox(height: 40,),
             Padding(
               padding: EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text("Login", style: TextStyle(color: Colors.white, fontSize: 40),),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                   children: [
+                     Text("R",
+                     style:GoogleFonts.courgette(
+                       fontSize: 28,
+                       fontWeight: FontWeight.w700,
+                       color: Colors.red[600],
+                       letterSpacing: 2,
+                       ),),
+                     Text("ed",
+                     style:GoogleFonts.courgette(
+                       fontSize: 28,
+                       fontWeight: FontWeight.w700,
+                       color: Colors.red[600],
+                       letterSpacing: 2
+                       ),
+                     ),
+                     Text("Birds",
+                     style:GoogleFonts.courgette(
+                       fontSize: 25,
+                       fontWeight: FontWeight.w600,
+                       letterSpacing: 2,
+                       color: Colors.white,
+                       ),
+                     ),
+                     
+                   ],
+                 ),
+                  Text("Login", style:GoogleFonts.lato(
+                                      fontSize: 40,
+                                      color:Colors.white,
+                                      fontWeight: FontWeight.w600,
+
+                                    ),),
                   SizedBox(height: 10,),
-                  Text("Welcome Back", style: TextStyle(color: Colors.white, fontSize: 18),),
+                  Text("Welcome Back", style:GoogleFonts.lato(
+                                      fontSize: 20,
+                                      color:Colors.white,
+                                      fontWeight: FontWeight.w600,
+
+                                    ),),
                 ],
               ),
             ),
@@ -52,7 +151,7 @@ class _LoginState extends State<Login> {
                         Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(20),
                             boxShadow: [BoxShadow(
                               color: Color.fromRGBO(225, 95, 27, .3),
                               blurRadius: 20,
@@ -66,7 +165,7 @@ class _LoginState extends State<Login> {
                                 Container(
                                   padding: EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    border: Border(bottom: BorderSide(color: Colors.grey.shade400))
+                                    border: Border(bottom: BorderSide(color: Colors.grey.shade200))
                                   ),
                                   child: TextFormField(
                                     validator: (input)
@@ -75,13 +174,21 @@ class _LoginState extends State<Login> {
                                             return "Enter email";
                                       }
                                       },
+                                      onSaved: (input)=>_email=input!,
                                     decoration: InputDecoration(
-                                      hintText: "Email Address",
-                                      hintStyle: TextStyle(color: Colors.grey),
+                                      prefixIcon: Icon(Icons.email_outlined ,color: Colors.orange.shade800,),
+                                      hintText: "Enter email Address",
+                                      hintStyle: GoogleFonts.lato(
+                                      fontSize: 14,
+                                      color:Colors.grey,
+                                      fontWeight: FontWeight.w600,
+
+                                    ),
                                       border: InputBorder.none
                                     ),
                                   ),
                                 ),
+                                //SizedBox(height:30,),
                                 Container(
                                   padding: EdgeInsets.all(10),
                                   decoration: BoxDecoration(
@@ -94,10 +201,17 @@ class _LoginState extends State<Login> {
                                             return "Wrong Password";
                                       }
                                       },
+                                      onSaved: (input)=>_password=input!,
                                     decoration: InputDecoration(
+                                      prefixIcon: Icon(Icons.lock ,color: Colors.orange.shade800,),
                                       hintText: "Password",
                                       
-                                      hintStyle: TextStyle(color: Colors.grey),
+                                      hintStyle: GoogleFonts.lato(
+                                      fontSize: 14,
+                                      color:Colors.grey,
+                                      fontWeight: FontWeight.w600,
+
+                                    ),
                                       border: InputBorder.none
                                     ),
                                     obscureText: true,
@@ -107,52 +221,164 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 40,),
-                        Text("Forgot Password?", style: TextStyle(color: Colors.grey),),
-                        SizedBox(height: 40,),
+                        SizedBox(height: 30,),
+                        GestureDetector( onTap: (){
+
+                        }
+                          ,child: Text(
+                            "Forgot Password?", 
+                            style:GoogleFonts.lato(
+                                      fontSize: 12,
+                                      color:Colors.grey.shade800,
+                                      fontWeight: FontWeight.w600,
+
+                                    ),)
+                              ),
+                        SizedBox(height: 20,),
                         Container(
+                          
                           height: 50,
                           margin: EdgeInsets.symmetric(horizontal: 50),
                           decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              colors: <Color>[ Colors.orange.shade800,Colors.orange.shade900,Colors.orange.shade500],
+                            ),
                             borderRadius: BorderRadius.circular(50),
-                            color: Colors.orange[900]
+                            //color: Colors.orange[900]
                           ),
-                          child: Center(
-                            child: Text("Login", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                          child: GestureDetector(
+                            onTap: (){
+                                login();
+                            },
+                            child: Center(
+                              child: Text("Login",style:GoogleFonts.lato(
+                                      fontSize: 17,
+                                      color:Colors.white,
+                                      fontWeight: FontWeight.w600,
+
+                                    ),),
+                            ),
                           ),
+                          
                         ),
-                        SizedBox(height: 50,),
-                        Text("Continue with social media", style: TextStyle(color: Colors.grey),),
-                        SizedBox(height: 30,),
+                        SizedBox(height: 20,),
+                        Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Container(
+                                      width: 80,
+                                      child: Divider(color: Colors.grey.shade600,),
+                                    ),
+                                    Text("or",style: GoogleFonts.lato(
+                                      fontSize: 16,
+                                      color:Colors.grey.shade600,
+                                      fontWeight: FontWeight.w600,
+
+                                    ),),
+                                    Container(
+                                      width: 80,
+                                      child: Divider(color: Colors.grey.shade600,),
+                                    ),
+                                    
+                                  ],
+                                ),
+                        SizedBox(height: 20,),
                         Row(
                           children: <Widget>[
                             Expanded(
                               child: Container(
                                 height: 50,
+                                width: 20,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
+                                  borderRadius: BorderRadius.circular(15),
                                   color: Colors.blue
                                 ),
                                 child: Center(
-                                  child: Text("Facebook", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                                  child: Text("Facebook",style:GoogleFonts.lato(
+                                      fontSize: 16,
+                                      color:Colors.white,
+                                      fontWeight: FontWeight.w600,
+
+                                    ),),
                                 ),
                               ),
                             ),
-                            SizedBox(width: 30,),
+                            SizedBox(width: 20,),
                             Expanded(
                               child: Container(
                                 height: 50,
+                                width: 20,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: Colors.black
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: Colors.redAccent.shade700,
                                 ),
                                 child: Center(
-                                  child: Text("Github", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                                  child: Text("Google +", style:GoogleFonts.lato(
+                                      fontSize: 16,
+                                      color:Colors.white,
+                                      fontWeight: FontWeight.w600,
+
+                                    ),),
                                 ),
                               )),
+                              SizedBox(width: 20,),
+                              Expanded(
+                                      child: Container(
+                                          height: 50,
+                                          
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(15),
+                                          color: Colors.blue.shade700,
+                                        ),
+                                        child: Center(
+                                          child: Text("Linkedin", style:GoogleFonts.lato(
+                                      fontSize: 16,
+                                      color:Colors.white,
+                                      fontWeight: FontWeight.w600,
+
+                                    ),),
+                                        ),
+                                      ),
+                                    ),
                             
                           ],
-                        )
+                        ),
+                        SizedBox(height:30),
+                         Padding(
+                           padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+                           child: Center(
+                             child: Row(
+                              children: [
+                                Text("Don't have an account?", style:GoogleFonts.lato(
+                                          fontSize: 14,
+                                          color:Colors.grey.shade600,
+                                          fontWeight: FontWeight.w600,
+
+                                        ),),
+
+                                SizedBox(width: 10,),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: (){
+                                        //Navigator.pushNamed(context, "SignUp");
+                                        Navigator.popAndPushNamed(context, "SignUp");
+                                    },
+                                    child: Center(
+                                      child: Text("Create New", style:GoogleFonts.lato(
+                                        fontSize: 14,
+                                        color:Colors.orange.shade800,
+                                        fontWeight: FontWeight.w600,
+
+                                      ),),
+                                    ),
+                                  )),
+                                
+                              ],
+                        ),
+                           ),
+                         ),
+                        
                       ],
                     ),
                   ),
