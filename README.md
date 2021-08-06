@@ -2,6 +2,14 @@
 
 A new Flutter project.
 
+##About
+
+
+
+##ScreenShots
+<img src="https://github.com/harshu-2001/News/blob/master/ss/Screenshot_2021-08-06-01-40-28-351_com.example.news_app.jpg" alt="alt text" width="300" height="500">
+<img src="https://github.com/harshu-2001/News/blob/master/ss/Screenshot_2021-08-06-01-40-38-157_com.example.news_app.jpg" alt="alt text" width="300" height="500">
+<img src="https://github.com/harshu-2001/News/blob/master/ss/Screenshot_2021-08-06-01-40-43-431_com.example.news_app.jpg" alt="alt text" width="300" height="500">
 ## Getting Started
 
 This project is a starting point for a Flutter application.
