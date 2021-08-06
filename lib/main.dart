@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/Authentication/Login.dart';
 import 'package:news_app/Authentication/signup.dart';
+import 'package:news_app/pages/Splash.dart';
 
 import 'Homepage/homepage.dart';
 
@@ -30,11 +31,12 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Homepage(),
+      home: Splash(),
     routes: <String,WidgetBuilder>{
 
         "Login" : (BuildContext context)=>Login(),
         "SignUp":(BuildContext context)=>Signup(),
+        "Home":(BuildContext context)=>Homepage(),
         
       },
     );

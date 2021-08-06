@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:news_app/Authentication/check.dart';
+import 'package:news_app/Authentication/database.dart';
 import 'package:string_validator/string_validator.dart';
 
 class Signup extends StatefulWidget {
@@ -13,7 +15,7 @@ class _SignupState extends State<Signup> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   FirebaseAuth _auth = FirebaseAuth.instance;
 
-  var _name, _email, _password,check;
+  var _name, _email, _password,check,_mob;
 
   checkAuthentication() async {
     _auth.authStateChanges().listen((user) async {
@@ -25,18 +27,15 @@ class _SignupState extends State<Signup> {
    void signUp() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      print("$check and $_password and$_name and $_email");
-    if(equals(check,_password)){
+      var c= new Check(_name, _email, _mob);
+      savepost(c);
+      if(equals(check,_password)){
       try {
         UserCredential user = await _auth.createUserWithEmailAndPassword(
             email: _email, password: _password);
         if (user != null) {
-          // UserUpdateInfo updateuser = UserUpdateInfo();
-          // updateuser.displayName = _name;
-          //  user.updateProfile(updateuser);
           await _auth.currentUser!.updateDisplayName(_name);
-          // await Navigator.pushReplacementNamed(context,"/") ;
-
+          
         }
       } catch (e) {
         showError(e.toString(),"error");
@@ -175,7 +174,7 @@ class _SignupState extends State<Signup> {
                             child: Column(
                               children: <Widget>[
 
-                                SizedBox(height:35),
+                                SizedBox(height:25),
                                 Container(
                                       width: 300,
                                       decoration: BoxDecoration(
@@ -204,7 +203,7 @@ class _SignupState extends State<Signup> {
                                       ),
                                     ),
                                     
-                                SizedBox(height: 35,),
+                                SizedBox(height: 20,),
                                 Container(
                                       width: 300,
                                       decoration: BoxDecoration(
@@ -227,13 +226,52 @@ class _SignupState extends State<Signup> {
                                               decoration: InputDecoration(
                                                 prefixIcon: Icon(Icons.mail_outline,color: Colors.orange.shade800,),
                                                 hintText: "Email Address",
-                                                hintStyle: TextStyle(color: Colors.grey,fontSize: 12),
+                                                hintStyle:GoogleFonts.lato(
+                                                    fontSize: 14,
+                                                    color:Colors.grey,
+                                                    fontWeight: FontWeight.w600,
+
+                                                  ),
                                                 border: InputBorder.none
                                               ),
 
                                       ),
                                     ),
-                                    SizedBox(height: 35,),
+                                    SizedBox(height: 20,),
+                                   
+                                   Container(
+                                      width: 300,
+                                      decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(20),
+                                      boxShadow: [BoxShadow(
+                                        color: Color.fromRGBO(225, 95, 27, .3),
+                                        blurRadius: 20,
+                                        offset: Offset(0, 10)
+                                      )]
+                                    ),
+                                      child: TextFormField(
+                                         validator: (input)
+                                                {
+                                                  if(input!.length<10){
+                                                      return "wrong number";
+                                                }
+                                                },
+                                                onSaved: (input)=>_mob=input!,
+                                              decoration: InputDecoration(
+                                                prefixIcon: Icon(Icons.call ,color: Colors.orange.shade800,),
+                                                hintText: "Mobile number",
+                                                hintStyle:GoogleFonts.lato(
+                                                    fontSize: 14,
+                                                    color:Colors.grey,
+                                                    fontWeight: FontWeight.w600,
+
+                                                  ),
+                                                border: InputBorder.none
+                                              ),
+                                      ),
+                                    ),
+                                  SizedBox(height:20),
                                    Container(
                                       width: 300,
                                       decoration: BoxDecoration(
@@ -258,13 +296,18 @@ class _SignupState extends State<Signup> {
                                       prefixIcon: Icon(Icons.lock ,color: Colors.orange.shade800,),
                                       hintText: "Password",
                                       
-                                      hintStyle: TextStyle(color: Colors.grey,fontSize: 12),
+                                      hintStyle: GoogleFonts.lato(
+                                      fontSize: 14,
+                                      color:Colors.grey,
+                                      fontWeight: FontWeight.w600,
+
+                                    ),
                                       border: InputBorder.none
                                     ),
                                     obscureText: true,
                                   ),
                                     ),
-                                     SizedBox(height: 35,),
+                                     SizedBox(height: 20,),
                                    Container(
                                       width: 300,
                                       decoration: BoxDecoration(
@@ -289,14 +332,19 @@ class _SignupState extends State<Signup> {
                                       prefixIcon: Icon(Icons.lock ,color: Colors.orange.shade800,),
                                       hintText: "Confirm Password",
                                       
-                                      hintStyle: TextStyle(color: Colors.grey,fontSize: 12),
+                                      hintStyle: GoogleFonts.lato(
+                                      fontSize: 14,
+                                      color:Colors.grey,
+                                      fontWeight: FontWeight.w600,
+
+                                    ),
                                       border: InputBorder.none
                                     ),
                                     obscureText: true,
                                   ),
                                     ),
 
-                                    SizedBox(height: 35,),
+                                    SizedBox(height: 20,),
 
                                 Container(
                                   

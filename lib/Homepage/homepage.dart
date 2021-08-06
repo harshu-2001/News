@@ -72,8 +72,9 @@ class _HomepageState extends State<Homepage> {
   General gen=General();
   late String y;
 
-  Future general()async{
+  general()async{
     await gen.getnews();
+    if (!mounted) return;
     setState(() {
     news=gen.news;
     
@@ -91,7 +92,7 @@ class _HomepageState extends State<Homepage> {
     super.initState();
     this.checkAuthentification();
     this.getUser();
-    this.general();
+    general();
   }
 
   @override
@@ -185,7 +186,24 @@ class _HomepageState extends State<Homepage> {
             
           ),
       
-          drawer: Drawer(
+          drawer:!isloggedin
+            ? 
+            Drawer(
+              child: Container(
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        child: CircularProgressIndicator(),
+                        height: 100.0,
+                        width: 100.0,
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ): Drawer(
             elevation: 0,
             child: ListView(children: [
               DrawerHeader(child: Text("${user.displayName}")),

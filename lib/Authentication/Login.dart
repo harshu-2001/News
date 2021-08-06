@@ -22,7 +22,7 @@ class _LoginState extends State<Login> {
       if (user != null) {
         print(user);
 
-        Navigator.pushReplacementNamed(context, "/");
+        Navigator.pushReplacementNamed(context, "Home");
       }
     });
   }
@@ -67,7 +67,7 @@ class _LoginState extends State<Login> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => Signup()));
   }
   navigatortostart()async{
-    Navigator.pushReplacementNamed(context, "/");
+    Navigator.pushReplacementNamed(context, "Home");
   }
 
  @override
