@@ -3,7 +3,7 @@
 A new way to see news .
 
 ## Details
-Red Birds app built with Flutter and :
+Rocket News app built with Flutter and :
 
 - Firebase authentication and firebase database[to store user data ]
 - next version contain search feature , multiple ways to login or signup 
